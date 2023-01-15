@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <title>Butopea products Feed</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/static/feed.xml",
+                dataType: "xml",
+                success: parseXML
+            })
+        });
+        function parseXML(xml) {
+            $("#load").fadeOut();
+            $(xml).find("item").each(function () {
+                var tr2 = '<div class="col-3 mb-2">';
+                tr2 += '<div class="card shadow-sm">';
+                tr2 += '<a href="' + $(this).find("link").text() + '"><img class="bd-placeholder-img card-img-top" src="' + $(this).find("image_link").text() + '" width="100%" height="300"/></a>';
+                tr2 += '<div class="card-body">';
+                tr2 += '<h5 class="card-title">' + $(this).find("title").text() + '</h5>';
+                tr2 += '<p class="card-text">' + $(this).find("description").text().substring(0, 60) + '</p>';
+                tr2 += '<p class="card-text">' + $(this).find("price").text() + '</p>';
+                tr2 += '</div>';
+                tr2 += '</div>';
+                tr2 += '</div>';
+                $('.row').append(tr2);
+            });
+        }   
+    </script>
+
+</head>
+
+<body>
+    <section class="py-5 text-center container">
+        <h1 class="fw-light">Butopea Products</h1>
+    </section>
+    <div class="album">
+        <div class="container">
+            <div class="row">
+                <div align="center" class="loader"><img src="/static/Loading.gif" id="load" /></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
